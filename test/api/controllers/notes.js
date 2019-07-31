@@ -42,6 +42,22 @@ describe('controllers', function () {
           });
       });
 
+      it('should return an array with one note', function (done) {
+
+        request(server)
+          .get('/notes')
+          .set('Accept', 'application/json')
+          .expect('Content-Type', 'application/json; charset=utf-8')
+          .expect(200)
+          .end(function (err, res) {
+            should.not.exist(err);
+
+            res.body.length.should.eql(1);
+
+            done();
+          });
+      });
+
       it('should not post a note with invalid input', function (done) {
 
         request(server)
@@ -54,6 +70,22 @@ describe('controllers', function () {
             should.not.exist(err);
 
             res.body.should.eql({ message: 'Saving note failed' });
+
+            done();
+          });
+      });
+
+      it('should return an array with one note 2', function (done) {
+
+        request(server)
+          .get('/notes')
+          .set('Accept', 'application/json')
+          .expect('Content-Type', 'application/json; charset=utf-8')
+          .expect(200)
+          .end(function (err, res) {
+            should.not.exist(err);
+
+            res.body.length.should.eql(1);
 
             done();
           });
@@ -142,8 +174,63 @@ describe('controllers', function () {
           });
       });
 
+      it('should remove a note', function (done) {
+
+        request(server)
+          .delete('/notes/1')
+          .set('Accept', 'application/json')
+          .expect('Content-Type', 'application/json; charset=utf-8')
+          .expect(202)
+          .end(function (err, res) {
+            should.not.exist(err);
+            res.body.should.eql({ message: 'Removed the note' });
+
+            done();
+          });
+      });
+
+      it('should not be able to remove the same note again', function (done) {
+        request(server)
+          .delete('/notes/1')
+          .set('Accept', 'application/json')
+          .expect('Content-Type', 'application/json; charset=utf-8')
+          .expect(400)
+          .end(function (err, res) {
+            should.not.exist(err);
+            res.body.should.eql({ message: 'Note with id does not exist' });
+
+            done();
+          });
+      });
+
+      it('should not remove note when id is not provided', function (done) {
+        request(server)
+          .delete('/notes')
+          .set('Accept', 'application/json')
+          .expect('Content-Type', 'application/json')
+          .expect(405)
+          .end(function (err, res) {
+            done();
+          });
+      });
+
+      it('should return an array with one note 3', function (done) {
+
+        request(server)
+          .get('/notes')
+          .set('Accept', 'application/json')
+          .expect('Content-Type', 'application/json; charset=utf-8')
+          .expect(200)
+          .end(function (err, res) {
+            should.not.exist(err);
+
+            res.body.length.should.eql(0);
+
+            done();
+          });
+      });
+
     });
 
   });
-
 });

@@ -85,15 +85,17 @@ function putNote(req, res) {
       db[index] = item;
       res.status(202).send({ message: 'Note updated successfully' });
     } else {
-
+console.log('db1' , db);
       res.status(204).send({ message: 'Note with id does not exist' });
     }
   } else {
+    console.log('db2' , db);
     res.status(400).send({ message: 'Invalid input' });
   }
 }
 
 function deleteNote(req, res) {
+  console.log('db', db);
   var id = req.swagger.params.id.value;
   if (id) {
     var item = db.find(p => p.id == id);
